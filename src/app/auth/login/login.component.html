@@ -10,13 +10,20 @@
         id="userEmail" formControlName="email" required
       />
     </div>
-    <div *ngIf="myForm.get('email')?.invalid && (myForm.get('email')?.dirty || myForm.get('email')?.touched)">
+    <div class="text-danger" *ngIf="myForm.get('email')?.invalid && (myForm.get('email')?.dirty || myForm.get('email')?.touched)">
       Please provide a valid email address.
     </div>
-    <div class="mb-3">
+
+
+    <div class="mb-3 mt-5">
       <label for="password" class="form-label">Password</label>
       <input type="password" class="form-control" id="password" formControlName="password"/>
     </div>
+    <div class="text-danger" *ngIf="myForm.get('password')?.invalid && (myForm.get('password')?.dirty || myForm.get('password')?.touched)">
+      Please provide a valid password.
+    </div>
+
+
     <button type="submit" class="btn btn-primary" [disabled]="myForm.invalid">Login</button>
   </form>
 </div>
