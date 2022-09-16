@@ -1,0 +1,78 @@
+<div class="container">
+  <ngx-ui-loader></ngx-ui-loader>
+
+  <h2 class="text-center mt-5 mb-5">Signup here</h2>
+
+  <form class="form" [formGroup]="myForm" (ngSubmit)="onSubmit(myForm)">
+    <div class="mb-3">
+      <label for="email" class="form-label">Email address</label>
+      <input
+        type="email"
+        class="form-control"
+        id="email"
+        formControlName="email"
+        email
+        required
+      />    
+      <div id="emailHelp" class="form-text">
+        We'll never share your email with anyone else.
+      </div>
+      <div
+        class="text-danger mt-0"
+        *ngIf="
+          myForm.get('email')?.invalid &&
+          (myForm.get('email')?.dirty || myForm.get('email')?.touched)
+        "
+      >
+        Please provide a valid email address.
+      </div>
+    </div>
+
+
+    <div class="mb-3">
+      <label for="password" class="form-label">Password</label>
+      <input
+        type="password"
+        class="form-control"
+        id="password"
+        formControlName="password"
+        required
+      />
+    </div>
+    <div
+        class="text-danger mt-0"
+        *ngIf="
+          myForm.get('password')?.invalid &&
+          (myForm.get('password')?.dirty || myForm.get('password')?.touched)
+        "
+      >
+        Please provide a valid password with min. of 8 chars.
+      </div>
+    
+
+
+    <div class="mb-3">
+      <label for="confirmPassword" class="form-label">Confirm Password</label>
+      <input
+        type="password"
+        class="form-control"
+        id="confirmPassword"
+        formControlName="confirmPassword"
+        required
+      />
+    </div>
+    <div
+      class="text-danger"
+      *ngIf="
+        myForm.get('password').touched && myForm.get('password').dirty &&
+        myForm.get('password').value !=
+        myForm.get('confirmPassword').value &&
+        myForm.get('confirmPassword').value != null
+      "
+    >
+      Password does not match
+    </div>
+
+    <button type="submit" class="btn btn-success" [disabled]="myForm.invalid">Signup</button>
+  </form>
+</div>
