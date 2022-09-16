@@ -27,7 +27,51 @@ export class LoginComponent implements OnInit {
   }
 
   onSubmit(form: FormGroup) {
-   
+    if (form.valid) {
+
+      // Start the ngX Loader
+      this.ngxLoader.start();
+
+      // Make a call to the create user API.
+      const { email, password, confirmPassword } = form.value;
+
+      if (email && password && confirmPassword) {
+        const api_url = environment.BACKEND_DOMAIN + '/user/create';
+        this.http.post<{ status: string }>(api_url, {
+          email, password, confirmPassword
+        }, {
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        }).subscribe(data => {
+          this.signup_result = data.status;
+          // Redirect the user to the login route.
+          // Stop the ngX Loader
+          this.ngxLoader.stop();
+          interval(1000).pipe(take(10))
+            .subscribe(data => {
+              this.signup_result = null;
+              this.signup_error = null;
+              this.router.navigate(['/login']);
+            });
+        },
+          error => {
+            if (error?.error?.error) {
+              this.signup_error = error.error.error;
+            }
+
+            // Stop the ngX Loader
+            this.ngxLoader.stop();
+            interval(1000).pipe(take(10))
+              .subscribe(data => {
+                this.signup_result = null;
+                this.signup_error = null;
+              });
+          });
+      }
+
+      // Perform the clean up
+    }
   }
 
 }
