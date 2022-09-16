@@ -13,8 +13,8 @@ import { environment } from 'src/environments/environment';
 })
 export class LoginComponent implements OnInit {
   myForm: FormGroup;
-  signup_result = null;
-  signup_error = null;
+  login_result = null;
+  login_error = null;
 
   constructor(private fb: FormBuilder, private ngxLoader: NgxUiLoaderService, private http:HttpClient, private router:Router) {
   }
@@ -33,39 +33,39 @@ export class LoginComponent implements OnInit {
       this.ngxLoader.start();
 
       // Make a call to the create user API.
-      const { email, password, confirmPassword } = form.value;
+      const { email, password } = form.value;
 
-      if (email && password && confirmPassword) {
-        const api_url = environment.BACKEND_DOMAIN + '/user/create';
+      if (email && password) {
+        const api_url = environment.BACKEND_DOMAIN + '/user/login';
         this.http.post<{ status: string }>(api_url, {
-          email, password, confirmPassword
+          email, password
         }, {
           headers: {
             'Content-Type': 'application/json'
           }
         }).subscribe(data => {
-          this.signup_result = data.status;
+          this.login_result = data.status;
           // Redirect the user to the login route.
           // Stop the ngX Loader
           this.ngxLoader.stop();
           interval(1000).pipe(take(10))
             .subscribe(data => {
-              this.signup_result = null;
-              this.signup_error = null;
+              this.login_result = null;
+              this.login_error = null;
               this.router.navigate(['/login']);
             });
         },
           error => {
             if (error?.error?.error) {
-              this.signup_error = error.error.error;
+              this.login_error = error.error.error;
             }
 
             // Stop the ngX Loader
             this.ngxLoader.stop();
             interval(1000).pipe(take(10))
               .subscribe(data => {
-                this.signup_result = null;
-                this.signup_error = null;
+                this.login_result = null;
+                this.login_error = null;
               });
           });
       }
